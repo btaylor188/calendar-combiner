@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:">
+  <title>Calendar Combiner</title>
+  <link rel="stylesheet" href="app.css">
+  <script src="../../node_modules/fullcalendar/index.global.min.js"></script>
+</head>
+<body>
+  <nav id="rail" aria-label="Calendars">
+    <button id="rail-combined" class="rail-btn active" type="button" title="All calendars" aria-label="All calendars">
+      <span class="quad" id="quad"></span>
+    </button>
+    <div id="rail-accounts"></div>
+    <div class="rail-end">
+      <button id="rail-add" class="rail-btn ghost" type="button" title="Add account" aria-label="Add account">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button id="rail-manage" class="rail-btn ghost" type="button" title="Manage accounts" aria-label="Manage accounts">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main id="combined">
+    <header id="bar">
+      <div class="range">
+        <h1 id="range-title"></h1>
+        <div class="nav">
+          <button type="button" class="icon" id="prev" aria-label="Previous">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" class="icon" id="next" aria-label="Next">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" id="today">Today</button>
+          <button type="button" class="icon" id="refresh" title="Refresh all calendars (R)" aria-label="Refresh all calendars">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <p id="overlaps" hidden></p>
+      <div class="views" role="tablist" aria-label="Layout">
+        <button type="button" role="tab" data-view="timeGridDay">Day</button>
+        <button type="button" role="tab" data-view="timeGridWeek">Week</button>
+        <button type="button" role="tab" data-view="dayGridMonth">Month</button>
+        <button type="button" role="tab" data-view="listWeek">Agenda</button>
+      </div>
+    </header>
+
+    <div id="legend"></div>
+    <div id="notice" hidden></div>
+
+    <div id="calendar"></div>
+
+    <section id="empty" hidden>
+      <h2>Put every calendar in one place</h2>
+      <p>Add each Outlook account, sign in once on its tab, and its meetings will show up here next to the others.</p>
+      <button type="button" class="primary" id="empty-add">Add account</button>
+    </section>
+
+    <footer id="sync-line"></footer>
+  </main>
+
+  <dialog id="event-dialog">
+    <form method="dialog">
+      <p id="ev-account"></p>
+      <h2 id="ev-title"></h2>
+      <p id="ev-when"></p>
+      <dl id="ev-meta"></dl>
+      <p id="ev-overlap" hidden></p>
+      <div class="actions">
+        <button value="close">Close</button>
+        <button type="button" class="primary" id="ev-open"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="accounts-dialog">
+    <form method="dialog">
+      <h2>Accounts</h2>
+      <ul id="account-rows"></ul>
+      <div class="actions"><button value="close">Done</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="add-dialog">
+    <form id="add-form">
+      <h2>Add an Outlook account</h2>
+      <label>Name
+        <input name="name" required maxlength="40" placeholder="Contoso" autocomplete="off">
+      </label>
+      <fieldset>
+        <legend>Account type</legend>
+        <label class="choice"><input type="radio" name="kind" value="work" checked> Work or school (Microsoft 365)</label>
+        <label class="choice"><input type="radio" name="kind" value="personal"> Personal (Outlook.com)</label>
+      </fieldset>
+      <fieldset>
+        <legend>Color</legend>
+        <div class="swatches" id="add-swatches"></div>
+      </fieldset>
+      <p class="hint">After you add it, its tab opens so you can sign in. Sign-in happens on Microsoft's own page.</p>
+      <div class="actions">
+        <button type="button" id="add-cancel">Cancel</button>
+        <button type="submit" class="primary">Add and sign in</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

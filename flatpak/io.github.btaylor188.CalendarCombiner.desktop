@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Calendar Combiner
+Comment=All your Outlook calendars in one view
+Exec=calendar-combiner %U
+Icon=io.github.btaylor188.CalendarCombiner
+Categories=Office;Calendar;
+StartupWMClass=calendar-combiner
+Terminal=false

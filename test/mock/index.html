@@ -1,0 +1,42 @@
+<!doctype html>
+<!-- A tiny stand-in for Outlook's week view: toolbar range, week buttons, labeled events. -->
+<meta charset="utf-8">
+<div id="toolbar"><button aria-label="Today">Today</button>
+  <button id="prev" aria-label="Go to previous week">‹</button>
+  <button id="next" aria-label="Go to next week">›</button>
+  <span id="range"></span>
+  <button aria-label="Go to next month">mini</button></div>
+<div id="grid"></div>
+<script>
+const showRange = !location.pathname.includes("/norange/"); // test the counting fallback
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const fmt = (d) => `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+let start = new Date(); start.setHours(0,0,0,0); start.setDate(start.getDate() - start.getDay()); // Sunday-start weeks
+function render() {
+  const end = new Date(start); end.setDate(end.getDate() + 6);
+  document.getElementById("range").textContent = !showRange ? "" : start.getMonth() === end.getMonth()
+    ? `${MONTHS[start.getMonth()]} ${start.getDate()}–${end.getDate()}, ${end.getFullYear()}`
+    : `${MONTHS[start.getMonth()].slice(0,3)} ${start.getDate()} – ${MONTHS[end.getMonth()].slice(0,3)} ${end.getDate()}, ${end.getFullYear()}`;
+  const label = (from) => { const to = new Date(from); to.setDate(to.getDate() + 6);
+    return `${MONTHS[from.getMonth()]} ${from.getDate()}–${to.getDate()}, ${to.getFullYear()}`; };
+  const prevStart = new Date(start); prevStart.setDate(prevStart.getDate() - 7);
+  const nextStart = new Date(start); nextStart.setDate(nextStart.getDate() + 7);
+  // Outlook puts the target week in the button's name, after a newline
+  document.getElementById("prev").setAttribute("aria-label", `Go to previous week \n${label(prevStart)}`);
+  document.getElementById("next").setAttribute("aria-label", `Go to next week \n${label(nextStart)}`);
+  const wed = new Date(start); wed.setDate(wed.getDate() + 3);
+  const key = wed.toISOString().slice(0, 10);
+  // A week-specific event plus a header-ish day label (no times)
+  document.getElementById("grid").innerHTML = "";
+  const ev = document.createElement("div");
+  ev.setAttribute("role", "button");
+  ev.setAttribute("aria-label", `Mock meeting ${key}, 10:00 AM to 11:00 AM, ${fmt(wed)}, Busy`);
+  ev.textContent = `Mock meeting ${key}\nSend invoice INV-2026-0042`; // digits and a dash, not a range
+  document.getElementById("grid").append(ev);
+}
+const move = (days) => setTimeout(() => { start.setDate(start.getDate() + days); render(); }, 250);
+document.getElementById("prev").onclick = () => move(-7);
+document.getElementById("next").onclick = () => move(7);
+setTimeout(render, 600); // the app takes a moment to boot
+</script>
