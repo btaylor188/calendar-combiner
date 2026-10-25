@@ -88,3 +88,5 @@ holds only page structure: toolbar text and button names. Use it to adjust
 
 Not affiliated with or endorsed by Microsoft. Outlook and Microsoft 365 are trademarks of
 Microsoft Corporation.
+
+Released under the [MIT License](LICENSE).
