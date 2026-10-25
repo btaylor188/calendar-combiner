@@ -34,7 +34,19 @@ calendar publishing or third-party app consent.
 - If the tenant only allows managed or compliant devices, sign-in is blocked just as it would be
   in any browser.
 
-## Build and install
+## Install
+
+Download the `.flatpak` from the [latest release](https://github.com/btaylor188/calendar-combiner/releases/latest), then:
+
+```sh
+flatpak install --user calendar-combiner-*-x86_64.flatpak
+flatpak run io.github.btaylor188.CalendarCombiner
+```
+
+The runtime and Electron base app come from Flathub. If Flathub isn't set up for your user, run
+`flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo` first.
+
+## Build from source
 
 Needs Node 22 and flatpak-builder (`flatpak install flathub org.flatpak.Builder`).
 
